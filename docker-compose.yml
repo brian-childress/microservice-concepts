@@ -1,0 +1,37 @@
+version: '3'
+services:
+  gateway:
+    command: ["npm", "run", "start:dev"]
+    container_name: gateway
+    image: node
+    environment:
+      PORT: 3000
+      SHIPPING_SERVICE: shipping-service:4000
+    networks:
+      - services
+    ports:
+      - 3000:3000
+    stdin_open: true
+    tty: true 
+    volumes:
+      - ./gateway:/api
+    working_dir: /api
+  shipping-service:
+    command: ["npm", "run", "start:dev"]
+    container_name: shipping-service
+    environment:
+      PORT: 4000
+    image: node
+    ports:
+      - 4000:4000
+    networks:
+      - services
+    stdin_open: true
+    tty: true 
+    volumes:
+       - ./shipping-service:/api
+    working_dir: /api
+networks:
+  services:
+volumes:
+  shipping-service:
