@@ -1,4 +1,5 @@
 const express = require("express");
+const randomError = require('./random-error-middleware');
 
 const app = express();
 app.use(express.json());
@@ -6,10 +7,9 @@ app.use(express.json());
 const port = process.env.PORT || 8080;
 
 // Routes
-app.get("/shipment", (req, res) => {
+app.get("/shipment", randomError(10), (req, res) => {
 
-  // res.send({ message: "sample shipping response" });
-  res.send("sample shipping response");
+  res.send({ message: "sample shipping response" });
 
 });
 

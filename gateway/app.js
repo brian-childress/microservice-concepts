@@ -1,5 +1,5 @@
 const express = require("express");
-const fetch = require("node-fetch");
+const circuitBreaker = require("./circuit-breaker");
 
 const app = express();
 app.use(express.json());
@@ -10,13 +10,12 @@ const port = process.env.PORT || 8080;
 app.get("/my-shipment", async (req, res) => {
   try {
 
-    const response = await fetch(`http://${process.env.SHIPPING_SERVICE}/shipment`);
-    const json = await response.json();
-    res.send(json);
+    const circuit = await circuitBreaker.makeRequest({ url: `http://${process.env.SHIPPING_SERVICE}/shipment` });
+    res.send(circuit);
 
   } catch (error) {
-
-    res.send(error);
+    console.log(error);
+    res.status(400).send('invalid request');
 
   }
 
