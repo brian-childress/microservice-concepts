@@ -63,7 +63,7 @@ const circuitBreaker = () => {
           const response = await fetch(requestOptions.url); // GET request
           if (!response.ok) {
             onFailure(endpoint);
-            reject({ status: response.status, message: response.message });
+            reject({ status: response.status, message: response.statusText });
           } else {
             onSuccess(endpoint);
             const json = await response.json()
